@@ -41,6 +41,7 @@ modnames_factions = {
     "prv Starworks":"PRV", # adds some pirate stuff but it's visually distinctive
     "slyphon":"Slyphon",
     "FED":"FED",
+    "Tiandong":"THI", # only adds a single common design- heavy mining laser
     "Tyrador":"TSC",
     "Underworld":"Underworld",
     "XhanEmpire":"Xhan",
@@ -52,7 +53,7 @@ modnames_vanillaish = {
     "Anvil Industries":"Anvil",
     "Arsenal Expansion":"AE",
     "CWSP":"CWSP",
-    "DissassembleReassemble":"DaRa",
+    "DisassembleReassemble":"DaRa",
     "ED Shipyard":"ED Shipyard",
     "fluffShipPack":"Fluff's Ship Pack",
     "Hegemony Expeditionary":"HEA",
@@ -66,10 +67,9 @@ modnames_vanillaish = {
     "Missing":"MSM",
     "PulseIndustry":"Pulse Industry",
     "SEEKER_UC":"Seeker",
-    "Ship and Weapon":"SWP",
+    "Ship and":"SWP",
     "Stop Gap Measure":"SGM",
     "tahlan":"Tahlan",
-    "Tiandong":"THI",
     "Torchships":"TADA",
     "Vayra's Sector":"Vayra's Sector",
     "Vayra's Ship Pack":"VSP",
@@ -77,47 +77,79 @@ modnames_vanillaish = {
 
 remove = False
 apply_to_faction_mods = False
-apply_to_vanillaish_mods = True
+apply_to_vanillaish_mods = False
 
-if 'faction' in sys.argv:
-    apply_to_faction_mods = True
-    apply_to_vanillaish_mods = False
-if 'remove' in sys.argv:
-    remove = True
-    apply_to_faction_mods = True
+options = input("""Options:\n
+    v:   Modify descriptions for vanilla-ish mods only.
+    f:   Modfiy descriptions for faction mods only.
+    vf:  Modify descriptions for both faction and vanilla-ish mods.
+    rv:  Revert changes to faction mods, returning descriptions to original form.
+    rf:  Revert changes to vanilla-ish mods, returning descriptions to original form.
+    rvf: Revert changes to all mods, returning descriptions to original form.
+    e:   Exit without doing anything.
+    Enter selection:""")
+
+output = ''
+if 'v' in options:
     apply_to_vanillaish_mods = True
+    output = output + 'Changes applied to vanilla-ish mods.\n'
+if 'f' in options:
+    apply_to_faction_mods = True
+    output = output + 'Changes applied to faction mods.\n'
+if 'r' in options:
+    remove = True
+    output = output + 'Returned all descriptions to original form.'
+if 'e' in options:
+    exit()
 
 for item in os.listdir('.'):
     replace = False
-    if os.path.isdir(item) and (apply_to_vanillaish_mods and (item in modnames_vanillaish.keys())):
-        modname = modnames_vanillaish.get(item)
+    invkeys = False
+    infkeys = False
+    actualkey = ''
+    for key in modnames_vanillaish.keys():
+        if key in item:
+            invkeys = True
+            actualkey = key
+    for key in modnames_factions.keys():
+        if key in item:
+            infkeys = True
+            actualkey = key
+    if os.path.isdir(item) and (apply_to_vanillaish_mods and invkeys):
+        modname = modnames_vanillaish.get(actualkey)
         replace = True
-    if os.path.isdir(item) and (apply_to_faction_mods and (item in modnames_factions.keys())):
-        modname = modnames_factions.get(item)
+    if os.path.isdir(item) and (apply_to_faction_mods and infkeys):
+        modname = modnames_factions.get(actualkey)
         replace = True
     filepath = os.path.join(os.path.dirname(__file__), item, 'data', 'strings','descriptions.csv')
-    if os.path.exists(filepath) and replace and os.path.isfile(filepath):
-        tempfile = NamedTemporaryFile('w+t', newline='', delete=False)
-        with open(filepath, newline='') as csvFile:
-            reader = csv.reader(csvFile)
-            writer = csv.writer(tempfile)
-
-            editList = []
-            for row in reader:
-                editList.append(row)
-
-            for row in editList:
-                if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]) and (row[1]=='SHIP' or row[1]=='WEAPON'):
-                    row[2] = "[" + modname + "] " + row[2]
-                if remove and (len(row) >= 2) and (len(row[2]) > 10) and '[' in row[2] and ']' in row[2] and modname in row[2]:
-                    string = row[2]
-                    row[2] = string[string.find(']')+2:len(string)]
-                writer.writerow(row)
-        csvFile.close()
-        tempfile.close()
-        shutil.move(tempfile.name, filepath)
-        print("Updated descriptions for " + modname)
-input("Script complete. Press Enter to close.")
+    try:
+        if os.path.exists(filepath) and replace and os.path.isfile(filepath):
+            tempfile = NamedTemporaryFile('w+t', newline='', delete=False, encoding='utf-8')
+            editsdone = False
+            with open(filepath, newline='',errors='replace',encoding='utf-8') as csvFile:
+                reader = csv.reader(csvFile,quoting=csv.QUOTE_ALL)
+                writer = csv.writer(tempfile)
+                for row in reader:
+                    if len(row) >= 2 and len(row[1]) > 13:
+                        raise Exception("malformed row: " + row[0])
+                    if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]) and (row[1]=='SHIP' or row[1]=='WEAPON'):
+                        row[2] = "[" + modname + "] " + row[2]
+                        editsdone = True
+                    if remove and (len(row) >= 2) and (len(row[2]) > 10) and '[' in row[2] and ']' in row[2] and modname in row[2]:
+                        string = row[2]
+                        row[2] = string[string.find(']')+2:len(string)]
+                        editsdone = True
+                    writer.writerow(row)
+            csvFile.close()
+            tempfile.close()
+            if editsdone:
+                shutil.move(tempfile.name, filepath)
+            print("Updated descriptions for " + modname)
+    except Exception as e:
+        print("ERROR: in " + modname + ", " + str(e))
+        print("Encountered an error with " + modname + ", skipping.")
+print(output)
+input("Done. Press Enter to close.")
 
 
 
