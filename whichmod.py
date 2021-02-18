@@ -1,9 +1,6 @@
 from tempfile import NamedTemporaryFile
 import csv, shutil, os, sys
 
-apply_to_faction_mods = False
-apply_to_vanillaish_mods = True
-
 # first bit is the folder name (can be any part of the mod folder name, doesn't have to be the whole thing)
 # second bit is what you want to go in the description
 modnames_factions = {
@@ -75,15 +72,20 @@ modnames_vanillaish = {
     "Vayra's Ship Pack":"VSP",
 }
 
+apply_to_faction_mods = False
+apply_to_vanillaish_mods = True
 
+if 'faction' in sys.argv:
+    apply_to_faction_mods = True
+    apply_to_vanillaish_mods = False
 
 for item in os.listdir('.'):
     replace = False
     if os.path.isdir(item) and (apply_to_vanillaish_mods and (item in modnames_vanillaish.keys())):
         modname = modnames_vanillaish.get(item)
         replace = True
-    if os.path.isdir(item) and (apply_to_faction_mods and (item in apply_to_faction_mods.keys())):
-        modname = modnames_vanillaish.get(item)
+    if os.path.isdir(item) and (apply_to_faction_mods and (item in modnames_factions.keys())):
+        modname = modnames_factions.get(item)
         replace = True
     filepath = os.path.join(os.path.dirname(__file__), item, 'data', 'strings','descriptions.csv')
     if os.path.exists(filepath) and replace and os.path.isfile(filepath):
@@ -97,7 +99,7 @@ for item in os.listdir('.'):
                 editList.append(row)
 
             for row in editList:
-                if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]):
+                if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]) and (row[1]=='SHIP' or row[1]=='WEAPON'):
                     row[2] = "[" + modname + "] " + row[2]
                 writer.writerow(row)
         csvFile.close()
