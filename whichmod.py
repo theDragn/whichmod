@@ -1,6 +1,9 @@
 from tempfile import NamedTemporaryFile
 import csv, shutil, os, sys
 
+# This script is by theDragn, and is licensed under a
+# Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+
 # first bit is the folder name (can be any part of the mod folder name, doesn't have to be the whole thing)
 # second bit is what you want to go in the description
 modnames_factions = {
