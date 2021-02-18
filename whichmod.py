@@ -75,12 +75,17 @@ modnames_vanillaish = {
     "Vayra's Ship Pack":"VSP",
 }
 
+remove = False
 apply_to_faction_mods = False
 apply_to_vanillaish_mods = True
 
 if 'faction' in sys.argv:
     apply_to_faction_mods = True
     apply_to_vanillaish_mods = False
+if 'remove' in sys.argv:
+    remove = True
+    apply_to_faction_mods = True
+    apply_to_vanillaish_mods = True
 
 for item in os.listdir('.'):
     replace = False
@@ -104,6 +109,9 @@ for item in os.listdir('.'):
             for row in editList:
                 if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]) and (row[1]=='SHIP' or row[1]=='WEAPON'):
                     row[2] = "[" + modname + "] " + row[2]
+                if remove and (len(row) >= 2) and (len(row[2]) > 10) and '[' in row[2] and ']' in row[2] and modname in row[2]:
+                    string = row[2]
+                    row[2] = string[string.find(']')+2:len(string)]
                 writer.writerow(row)
         csvFile.close()
         tempfile.close()
