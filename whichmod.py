@@ -1,4 +1,5 @@
 from tempfile import NamedTemporaryFile
+from unidecode import unidecode
 import csv, shutil, os, sys
 
 # This script is by theDragn, and is licensed under a
@@ -139,7 +140,10 @@ for item in os.listdir('.'):
                         string = row[2]
                         row[2] = string[string.find(']')+2:len(string)]
                         editsdone = True
-                    writer.writerow(row)
+                    writerow = []
+                    for thing in row:
+                        writerow.append(unidecode(thing))
+                    writer.writerow(writerow)
             csvFile.close()
             tempfile.close()
             if editsdone:
@@ -150,6 +154,4 @@ for item in os.listdir('.'):
         print("Encountered an error with " + modname + ", skipping.")
 print(output)
 input("Done. Press Enter to close.")
-
-
 
