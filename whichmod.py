@@ -131,7 +131,9 @@ for item in os.listdir('.'):
                 reader = csv.reader(csvFile,quoting=csv.QUOTE_ALL)
                 writer = csv.writer(tempfile)
                 for row in reader:
-                    if len(row) >= 2 and len(row[1]) > 13:
+                    #if len(row) >= 2 and len(row[1]) > 13:
+                    #    raise Exception("malformed row: " + row[0])
+                    if len(row) >= 2 and row[1] not in ['WEAPON','SHIP','SHIP_SYSTEM','PLANET','CUSTOM','FACTION','RESOURCE', 'TERRAIN','type','']:
                         raise Exception("malformed row: " + row[0])
                     if (len(row) >= 2) and (len(row[2]) > 10) and ('[' not in row[2][0]) and (row[1]=='SHIP' or row[1]=='WEAPON'):
                         row[2] = "[" + modname + "] " + row[2]
