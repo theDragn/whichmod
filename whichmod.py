@@ -51,11 +51,13 @@ modnames_factions = {
 }
 
 modnames_vanillaish = {
+    "ARSWP":"ARSWP",
     "Anvil Industries":"Anvil",
     "Arsenal Expansion":"AE",
     "CWSP":"CWSP",
     "DisassembleReassemble":"DaRa",
     "ED Shipyard":"ED Shipyard",
+    "EXPSP":"EXPSP",
     "fluffShipPack":"Fluff's Ship Pack",
     "Hegemony Expeditionary":"HEA",
     "HMI":"HMI",
