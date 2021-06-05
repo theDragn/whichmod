@@ -8,6 +8,7 @@ import csv, shutil, os, sys
 # first bit is the folder name (can be any part of the mod folder name, doesn't have to be the whole thing)
 # second bit is what you want to go in the description
 modnames_factions = {
+    "armaa":"Arma Armatura", # has its own manufacturer, but additions are vanilla-like
     "ApproLight":"ApproLight",
     "Blackrock":"BRDY",
     "Celestial Mount":"CMC",
@@ -29,6 +30,7 @@ modnames_factions = {
     "Kadur Remnant":"Kadur",
     "Kingdom of Terra":"KT",
     "Legacy of Arkgneisis":"LoA",
+    "Magellan":"Magellan",
     "Neutrino corp":"Neutrino",
     "nabaal":"Kiith Nabaal",
     "Oculian Armada":"Oculian",
@@ -51,15 +53,18 @@ modnames_factions = {
 }
 
 modnames_vanillaish = {
+    "Asteroid":"Asteroids",
     "ARSWP":"ARSWP",
     "Anvil Industries":"Anvil",
     "Arsenal Expansion":"AE",
+    "BSC":"BigBeans",
     "CWSP":"CWSP",
     "DisassembleReassemble":"DaRa",
     "ED Shipyard":"ED Shipyard",
     "EXPSP":"EXPSP",
     "fluffShipPack":"Fluff's Ship Pack",
     "Hegemony Expeditionary":"HEA",
+    "HHE":"Fighter Expansion",
     "HMI":"HMI",
     "HTE":"HTE",
     "JP_RC":"Junk Pirates",
@@ -69,6 +74,7 @@ modnames_vanillaish = {
     "Metelson":"Metelson",
     "Missing":"MSM",
     "PulseIndustry":"Pulse Industry",
+    "RotcesRats":"RotcesRats",
     "SEEKER_UC":"Seeker",
     "Ship and":"SWP",
     "Stop Gap Measure":"SGM",
