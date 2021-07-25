@@ -1,0 +1,5 @@
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+WhichMod is by theDragn, and is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+
+Thanks to DR for letting me know that descriptions were objects, not strings.
