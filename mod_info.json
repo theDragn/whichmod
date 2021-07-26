@@ -2,7 +2,7 @@
 	"id":"whichmod",
 	"name":"WhichMod",
 	"author":"theDragn",
-	"version":"1.0.0",
+	"version":"0.0.1",
 	"description":"Tells you what mod something is from.",
 	"gameVersion":"0.95a-RC15",
 	"jars":["jars/WhichMod.jar"],

@@ -30,7 +30,6 @@ public class WhichModPlugin extends BaseModPlugin
 
     public static final Map<String, String> modShortNameMap = new HashMap<>();
     public static boolean USE_FULL_NAMES;
-    public static boolean EDIT_DESIGN;
     public static boolean SHIPS_AND_WEAPONS_ONLY;
     public static String LEFT_BRACKET;
     public static String RIGHT_BRACKET;
@@ -57,7 +56,6 @@ public class WhichModPlugin extends BaseModPlugin
     {
         JSONObject settings = Global.getSettings().loadJSON(SETTINGS_FILE);
         USE_FULL_NAMES = settings.getBoolean("useFullNames");
-        EDIT_DESIGN = settings.getBoolean("editDesign");
         SHIPS_AND_WEAPONS_ONLY = settings.getBoolean("shipsAndWeaponsOnly");
         LEFT_BRACKET = settings.getString("bracketCharacterL");
         RIGHT_BRACKET = settings.getString("bracketCharacterR");
@@ -108,11 +106,17 @@ public class WhichModPlugin extends BaseModPlugin
                             desc = settings.getDescription(id, descType);
                         else
                             continue;
-
+                        String prefix;
                         if (USE_FULL_NAMES || modShortNameMap.get(mod.getId()) == null)
-                            desc.setText1(LEFT_BRACKET + mod.getName() + RIGHT_BRACKET + " "+ desc.getText1());
+                            prefix = LEFT_BRACKET + mod.getName() + RIGHT_BRACKET + " ";
                         else
-                            desc.setText1(LEFT_BRACKET + modShortNameMap.get(mod.getId()) + RIGHT_BRACKET + " " + desc.getText1());
+                            prefix = LEFT_BRACKET + modShortNameMap.get(mod.getId()) + RIGHT_BRACKET + " ";
+
+                        int index = desc.getText1().lastIndexOf(prefix);
+                        if (index == -1)
+                            desc.setText1(prefix + desc.getText1());
+                        else
+                            desc.setText1(prefix + desc.getText1().substring(index+1));
                     }
 
                 } catch (Exception e)

@@ -4,7 +4,8 @@
     # this decides if it'll use the full modname or the abbreviation
     "useFullNames":true,
 
-    # setting this to false will make it work for ALL entries in descriptions.csv instead of just ships/weapons/fighters. You probably don't want that.
+    # setting this to false will make it work for ALL entries in descriptions.csv instead of just ships/weapons/fighters.
+    # this really isn't tested at all and may have unexpected results
     "shipsAndWeaponsOnly":true,
 
     # what are you, some sort of nerd who doesn't like square brackets?
