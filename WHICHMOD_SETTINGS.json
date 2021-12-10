@@ -4,7 +4,10 @@
     # this decides if it'll use the full modname or the abbreviation
     "useFullNames":true,
 
-    # setting this to false will make it work for ALL entries in descriptions.csv instead of just ships/weapons/fighters.
+    # sets whether it works on hullmods or not
+    "doHullmods":true,
+
+    # setting this to false will make it work for ALL entries in descriptions.csv
     # this really isn't tested at all and may have unexpected results
     "shipsAndWeaponsOnly":true,
 
